@@ -1,29 +1,40 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, Suspense, lazy } from 'react';
 import axios from 'axios';
 
 import SearchBar from './components/SearchBar.jsx';
 import ProductList from './components/ProductList.jsx';
 import ToggleButton from './components/ToggleButton.jsx';
-import StatsPanel from './components/StatsPanel.jsx';
+
+import Pagination from './components/Pagination.jsx';
+import Filters from './components/Filters.jsx';
+import Message from './components/Message.jsx';
+import MainContent from './components/MainContent.jsx';
+
+// 👇 Carga diferida de los paneles pesados
+const StatsPanel = lazy(() => import('./components/StatsPanel.jsx'));
+const ChartsPanel = lazy(() => import('./components/ChartsPanel.jsx'));
 
 function App() {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('Todos');
-  const [sortBy, setSortBy] = useState('price'); // Por defecto en precio
+  const [sortBy, setSortBy] = useState('price');
   const [sortOrder, setSortOrder] = useState('asc');
   const [showStats, setShowStats] = useState(false);
   const [categories, setCategories] = useState([]);
-
   const darkModeRef = useRef(false);
   const [, forceRender] = useState(0);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 10;
+
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     const getProducts = async () => {
       try {
         const response = await axios.get('https://dummyjson.com/products?limit=100');
         setProducts(response.data.products);
-
         const uniqueCategories = ['Todos', ...new Set(response.data.products.map(p => p.category))];
         setCategories(uniqueCategories);
       } catch (error) {
@@ -33,7 +44,6 @@ function App() {
 
     getProducts();
 
-    // Detectar si el sistema está en modo oscuro
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       darkModeRef.current = true;
       document.documentElement.classList.add('dark');
@@ -41,28 +51,48 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, categoryFilter, sortBy, sortOrder]);
+
   const toggleDarkMode = () => {
     darkModeRef.current = !darkModeRef.current;
-    if (darkModeRef.current) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
+    document.documentElement.classList.toggle('dark', darkModeRef.current);
     forceRender(n => n + 1);
   };
 
-  // 🧠 Filtro + Búsqueda + Ordenamiento combinado
   const filteredProducts = products
     .filter(product => product.title.toLowerCase().includes(searchTerm.toLowerCase()))
     .filter(product => categoryFilter === 'Todos' ? true : product.category === categoryFilter)
     .sort((a, b) => {
       if (!sortBy) return 0;
-
       const aValue = Number(a[sortBy]);
       const bValue = Number(b[sortBy]);
-
       return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
     });
+
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+
+  const handleExportJSON = () => {
+    try {
+      const dataStr = JSON.stringify(filteredProducts, null, 2);
+      const blob = new Blob([dataStr], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "products.json";
+      link.click();
+      URL.revokeObjectURL(url);
+      setMessage({ type: 'success', text: 'Exportación exitosa.' });
+    } catch (error) {
+      console.error('Error al exportar JSON:', error);
+      setMessage({ type: 'error', text: 'Error al exportar JSON.' });
+    }
+    setTimeout(() => setMessage(null), 3000);
+  };
 
   return (
     <div className="p-4 min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300 flex flex-col">
@@ -71,53 +101,33 @@ function App() {
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
         <ToggleButton darkMode={darkModeRef.current} onToggle={toggleDarkMode} />
         <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+        <button
+          onClick={handleExportJSON}
+          className="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700 transition"
+        >
+          Exportar JSON
+        </button>
       </div>
 
-      <div className="flex flex-wrap gap-4 justify-center sm:justify-start mb-6">
-        {/* Select de categoría */}
-        <select
-          value={categoryFilter}
-          onChange={(e) => setCategoryFilter(e.target.value)}
-          className="px-3 py-2 rounded bg-white dark:bg-gray-800 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600 transition"
-        >
-          {categories.map((cat) => (
-            <option key={cat} value={cat}>{cat}</option>
-          ))}
-        </select>
+      <Message message={message} />
 
-        {/* Select de campo de ordenamiento */}
-        <select
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
-          className="px-3 py-2 rounded bg-white dark:bg-gray-800 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600 transition"
-        >
-          <option value="">Ordenar por...</option>
-          <option value="price">Precio</option>
-          <option value="rating">Rating</option>
-        </select>
+      <Filters
+        categories={categories}
+        categoryFilter={categoryFilter}
+        setCategoryFilter={setCategoryFilter}
+        sortBy={sortBy}
+        setSortBy={setSortBy}
+        sortOrder={sortOrder}
+        setSortOrder={setSortOrder}
+      />
 
-        {/* Select de ascendente/descendente */}
-        <select
-          value={sortOrder}
-          onChange={(e) => setSortOrder(e.target.value)}
-          className="px-3 py-2 rounded bg-white dark:bg-gray-800 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600 transition"
-        >
-          <option value="asc">Ascendente</option>
-          <option value="desc">Descendente</option>
-        </select>
-      </div>
+      <MainContent products={currentProducts} />
 
-      <div className="flex-grow">
-        {filteredProducts.length === 0 ? (
-          <div className="flex items-center justify-center h-full">
-            <p className="text-center text-lg text-gray-500 dark:text-gray-400">
-              No se encontraron productos.
-            </p>
-          </div>
-        ) : (
-          <ProductList products={filteredProducts} />
-        )}
-      </div>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
 
       <button
         onClick={() => setShowStats(!showStats)}
@@ -126,7 +136,12 @@ function App() {
         {showStats ? 'Ocultar Estadísticas' : 'Mostrar Estadísticas'}
       </button>
 
-      {showStats && <StatsPanel products={filteredProducts} />}
+      {showStats && (
+        <Suspense fallback={<p className="mt-4 text-center text-gray-600 dark:text-gray-300">Cargando estadísticas...</p>}>
+          <StatsPanel products={filteredProducts} />
+          <ChartsPanel products={filteredProducts} />
+        </Suspense>
+      )}
     </div>
   );
 }
