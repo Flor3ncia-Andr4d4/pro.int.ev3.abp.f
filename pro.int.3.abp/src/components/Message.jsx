@@ -1,17 +1,22 @@
 // src/components/Message.jsx
 
-// Componente para mostrar un mensaje de éxito o error
+// Este componente muestra un mensaje de éxito o error
 export default function Message({ message }) {
-  // Si no hay mensaje, no se muestra nada
-  if (!message) return null;
+  // Si no hay mensaje, no mostrar nada
+  if (!message) {
+    return null;
+  }
 
-  // Elegimos el estilo según el tipo de mensaje (éxito o error)
-  const className = message.type === 'success'
-    ? 'bg-green-200 text-green-800'
-    : 'bg-red-200 text-red-800';
+  // Elegir colores según el tipo de mensaje
+  let styleClass = '';
+  if (message.type === 'success') {
+    styleClass = 'bg-green-200 text-green-800'; // colores para éxito
+  } else {
+    styleClass = 'bg-red-200 text-red-800'; // colores para error
+  }
 
   return (
-    <div className={`mb-4 px-4 py-2 rounded text-center ${className}`}>
+    <div className={'mb-4 px-4 py-2 rounded text-center ' + styleClass}>
       {message.text}
     </div>
   );
