@@ -102,22 +102,38 @@ Cada estudiante debe crear un único repositorio en **GitHub** para el proyecto.
 
 ---
 
-## 🛠️ Instalación y uso
+# Instrucciones para acceder y correr el proyecto
 
-Sigue estos pasos para clonar, instalar y ejecutar la aplicación localmente:
+## Ubicación del proyecto
+
+El proyecto está dentro de la carpeta:
+
+
+## Pasos para ingresar al proyecto
+
+1. Abrir la terminal (CMD o PowerShell).
+
+2. Navegar primero a la carpeta principal:
+
+    ```bash
+    cd %USERPROFILE%\Desktop\PRO.INT.EV3.ABP.F
+    ```
+
+3. Luego ingresar a la carpeta del proyecto:
+
+    ```bash
+    cd pro.int.3.abp
+    ```
+
+## Instalar las dependencias
+
+Una vez dentro de la carpeta del proyecto, ejecutar:
 
 ```bash
-# Clonar el repositorio
-git clone https://github.com/tu-usuario/tu-repositorio.git
-
-# Entrar en la carpeta del proyecto
-cd tu-repositorio
-
-# Instalar dependencias
 npm install
 
-# Ejecutar en modo desarrollo
-npm start
+## Correr el proyecto
+npm run dev
 
 ---
 ## 🔗 API utilizada
