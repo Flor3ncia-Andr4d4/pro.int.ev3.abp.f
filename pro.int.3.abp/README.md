@@ -64,21 +64,17 @@ Cada estudiante debe crear un único repositorio en **GitHub** para el proyecto.
 El proyecto está dentro de la carpeta:
 
 
-## Pasos para ingresar al proyecto
+# 📄 Información importante para clonar y revisar el repositorio
 
-1. Abrir la terminal (CMD o PowerShell).
+## 1️⃣ Archivos rastreados por Git
+El repositorio incluye correctamente los archivos del proyecto, como `README.md`, `package.json`, `App.jsx`, entre otros.
 
-2. Navegar primero a la carpeta principal:
+## 2️⃣ Estructura del proyecto
+El proyecto se encuentra dentro de la carpeta `pro.int.3.abp/`, la cual a su vez está dentro de `pro.int.ev3.abp.f/`. Esto significa que al clonar el repositorio, deberá navegar a esa ruta para acceder al código fuente principal.
 
-    ```bash
-    cd %USERPROFILE%\Desktop\PRO.INT.EV3.ABP.F
-    ```
+## 3️⃣ Verificación de estructura
+Si nota que la carpeta `pro.int.3.abp/` no contiene el proyecto esperado o parece estar en una ruta incorrecta, puede verificar si los archivos deberían estar en la raíz del repositorio. De ser necesario, puede moverlos para facilitar la revisión.
 
-3. Luego ingresar a la carpeta del proyecto:
-
-    ```bash
-    cd pro.int.3.abp
-    ```
 
 ## Instalar las dependencias
 
