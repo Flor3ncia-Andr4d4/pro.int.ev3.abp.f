@@ -51,54 +51,9 @@ El desarrollo debe realizarse progresivamente, incorporando nuevas funcionalidad
 ### 🗂️ Uso obligatorio de repositorio GitHub
 Cada estudiante debe crear un único repositorio en **GitHub** para el proyecto. El desarrollo se realizará exclusivamente en dicho repositorio, que servirá como registro evolutivo del proyecto.
 
----
 
-## 📅 Cronograma por semanas
 
-### Semana 1 – React + Axios + Búsqueda
-**Objetivo:** Consolidar fundamentos de React y consumir la API **DummyJSON** con Axios.  
-**Tareas:**
-- Obtener productos desde [DummyJSON](https://dummyjson.com/products?limit=100).
-- Mostrar lista de productos con nombre y precio.
-- Implementar barra de búsqueda.
-- Mostrar mensajes si no hay coincidencias.
-- Agregar botón para mostrar/ocultar estadísticas.
 
-### Semana 2 – Tailwind + Componentización
-**Objetivo:** Aplicar estilos y dividir la aplicación en componentes reutilizables.  
-**Tareas:**
-- Configurar **Tailwind CSS**.
-- Crear componentes: `ProductList`, `ProductItem`, `StatsPanel`, `SearchBar`, etc.
-- Implementar **modo oscuro** con `useRef`.
-
-### Semana 3 – Filtrado y Ordenamiento
-**Objetivo:** Incorporar filtros y ordenamiento dinámicos.  
-**Tareas:**
-- Agregar **filtro** por categoría (_category_ de DummyJSON).
-- Implementar **ordenamiento** por precio y rating (ascendente/descendente).
-
-### Semana 4 – Estadísticas Detalladas
-**Objetivo:** Procesamiento de datos y estadísticas básicas.  
-**Tareas:** Mostrar:
-- **Precio promedio, máximo y mínimo**.
-- **Cantidad de productos por categoría**.
-- **Cantidad de productos con stock > 50, rating > 4.5**, etc.
-- **Producto más caro y más barato por categoría**.
-- **Promedio de rating general y por categoría**.
-
-### Semana 5 – Visualización de Datos
-**Objetivo:** Incluir gráficos interactivos con **Recharts**.  
-**Tareas:**
-- Gráfico de barras: **cantidad de productos por categoría**.
-- Gráfico de líneas: **evolución simulada de precios**.
-- Gráfico de pastel: **proporción de productos según stock**.
-
-### Semana 6 – Exportación y UX
-**Objetivo:** Optimizar experiencia de usuario y agregar exportación de datos.  
-**Tareas:**
-- **Exportar** productos filtrados a **JSON, CSV o Excel**.
-- Implementar **paginación** o carga perezosa (_lazy loading_).
-- Mejorar tiempos de carga y jerarquía visual.
 
 ---
 

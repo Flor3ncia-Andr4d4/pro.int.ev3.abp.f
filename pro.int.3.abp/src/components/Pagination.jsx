@@ -1,4 +1,4 @@
-// Componente para mostrar botones de paginación
+// Componente de paginación con botones de números y flechas
 export default function Pagination(props) {
   // props.currentPage es la página actual
   // props.totalPages es la cantidad total de páginas
@@ -9,7 +9,18 @@ export default function Pagination(props) {
 
   return (
     <div className="flex justify-center mt-4 space-x-2">
-      {/* Creamos un arreglo con la cantidad de páginas para mostrar botones */}
+      {/* Botón para ir atrás, deshabilitado en la primera página */}
+      <button
+        onClick={() => props.onPageChange(props.currentPage - 1)}
+        disabled={props.currentPage === 1}
+        className={`px-3 py-1 border rounded ${
+          props.currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-blue-500 text-white"
+        }`}
+      >
+        ←
+      </button>
+
+      {/* Botones con los números de página */}
       {[...Array(props.totalPages)].map((_, i) => {
         const pageNum = i + 1; // Número de página (empieza en 1)
         return (
@@ -29,6 +40,17 @@ export default function Pagination(props) {
           </button>
         );
       })}
+
+      {/* Botón para ir adelante, deshabilitado en la última página (10) */}
+      <button
+        onClick={() => props.onPageChange(props.currentPage + 1)}
+        disabled={props.currentPage === 10}
+        className={`px-3 py-1 border rounded ${
+          props.currentPage === 10 ? "bg-gray-300 cursor-not-allowed" : "bg-blue-500 text-white"
+        }`}
+      >
+        →
+      </button>
     </div>
   );
 }

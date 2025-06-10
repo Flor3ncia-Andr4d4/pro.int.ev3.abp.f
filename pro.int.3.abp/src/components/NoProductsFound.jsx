@@ -1,17 +1,15 @@
 // Componente para mostrar cuando no hay productos encontrados
-// Tiene un texto rojo con una animación simple que hace que parpadee suavemente
+// Se asegura de que la pantalla no se achique
 
 function NoProductsFound() {
   return (
-    // Contenedor para centrar el texto y darle espacio mínimo de alto
+    // Contenedor que ocupa toda la pantalla para evitar reducción
     <div
-      style={{ minHeight: '200px' }}  // Esto evita que el contenedor se achique mucho
-      className="flex justify-center items-center" // Usa flexbox para centrar contenido horizontal y verticalmente
+      className="flex justify-center items-center w-full"
+      style={{ minHeight: "100vh" }} // Usa altura de toda la pantalla
     >
-      {/* Texto que indica que no hay productos */}
-      <p
-        className="text-red-600 text-lg font-semibold animate-pulse" // Color rojo, tamaño mediano, negrita y animación de parpadeo
-      >
+      {/* Texto rojo con animación de parpadeo */}
+      <p className="text-red-600 text-lg font-semibold animate-pulse">
         No se encontraron productos.
       </p>
     </div>

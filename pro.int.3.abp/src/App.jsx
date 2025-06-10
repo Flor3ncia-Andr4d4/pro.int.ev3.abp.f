@@ -2,13 +2,14 @@ import { useEffect, useState, useRef, Suspense, lazy } from 'react';
 import axios from 'axios';
 
 import SearchBar from './components/SearchBar.jsx';
-import ProductList from './components/ProductList.jsx';
+
 import ToggleButton from './components/ToggleButton.jsx';
 import Pagination from './components/Pagination.jsx';
 import Filters from './components/Filters.jsx';
 import Message from './components/Message.jsx';
 import MainContent from './components/MainContent.jsx';
 import NoProductsFound from './components/NoProductsFound.jsx'; // Import nuevo
+
 
 // Carga diferida (lazy load) de componentes pesados para mejorar rendimiento
 const StatsPanel = lazy(() => import('./components/StatsPanel.jsx'));
